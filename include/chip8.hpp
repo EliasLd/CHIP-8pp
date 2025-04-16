@@ -5,6 +5,7 @@
 
 #include "constants.hpp"
 #include "cpu.hpp"
+#include "random.hpp"
 
 class Chip8
 {
@@ -21,6 +22,7 @@ private:
     // Operation code, represents an instruction that has
     // to be executed by the cpu
     uint16_t opcode {};
+    RandomGenerator random_device {};
     Cpu cpu {};
 public:
     Chip8();
