@@ -19,6 +19,18 @@ public:
     Cpu();
 
     void setPC(uint16_t value);
+
+    // Instructions
+    void opc_8xy0();
+    void opc_8xy1();
+    void opc_8xy2();
+    void opc_8xy3();
+    void opc_8xy4();
+    void opc_8xy5();
+    void opc_8xy6();
+    void opc_8xy7();
+    void opc_8xyE();
+
 };
 
 #endif
