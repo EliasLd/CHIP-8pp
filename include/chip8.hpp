@@ -26,6 +26,8 @@ private:
     Cpu cpu {};
 public:
     Chip8();
+
+    void loadRomIntoMemory(const std::string& filename);
 };
 
 #endif

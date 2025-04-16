@@ -17,6 +17,8 @@ private:
     uint8_t sp {};
 public: 
     Cpu();
+
+    void setPC(uint16_t value);
 };
 
 #endif
