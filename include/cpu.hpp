@@ -15,6 +15,9 @@ private:
     // stack pointer, keeps track of the most
     // recent value placed in the stack
     uint8_t sp {};
+    // Operation code, represents an instruction that has
+    // to be executed by the cpu
+    uint16_t opcode {};
 public: 
     Cpu();
 
