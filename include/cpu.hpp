@@ -4,6 +4,8 @@
 #include <cstdint>
 #include "constants.hpp"
 
+class Chip8;
+
 class Cpu {
 private:
     uint8_t registers[Chip8Specs::RegisterCount] {};
@@ -18,9 +20,13 @@ private:
     // Operation code, represents an instruction that has
     // to be executed by the cpu
     uint16_t opcode {};
+    // Reference to the Chip8 system
+    // used to simplify memory access
+    Chip8* system {nullptr};
 public: 
     Cpu();
 
+    void setSystem(Chip8* sys);
     void setPC(uint16_t value);
 
     // Instructions

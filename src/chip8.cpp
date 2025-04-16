@@ -10,6 +10,9 @@ Chip8::Chip8()
     {
         memory[Chip8Specs::FontSetStartAddress + i] = Chip8Specs::FontSet[i];
     }
+
+    // Bind the system to the cpu
+    cpu.setSystem(this);
 }
 
 void Chip8::loadRomIntoMemory(const std::string& filename)
