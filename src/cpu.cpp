@@ -94,7 +94,29 @@ void Cpu::opc_8xy6()
 {
     uint8_t vx {extractVx(MASK_OPC_VX)};
 
+    // Save least significant bit 
     registers[0xF] = (registers[vx] & MASK_LSB);
 
     registers[vx] >>= 1;
+}
+
+// SUBN vx, vy
+void Cpu::opc_8xy7()
+{
+    uint8_t vx {extractVx(MASK_OPC_VX)};
+    uint8_t vy {extractVy(MASK_OPC_VY)};
+
+    registers[0xF] = (registers[vy] > registers[vx]) ? 1 : 0;
+
+    registers[vx] = registers[vy] - registers[vx];
+}
+
+// SHL vx
+void Cpu::opc_8xyE()
+{
+    uint8_t vx {extractVx(MASK_OPC_VX)};
+
+    registers[0xF] = (registers[vx] & MASK_MSB) >> 7u;
+
+    registers[vx] <<= 1;
 }
