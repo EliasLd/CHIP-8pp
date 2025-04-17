@@ -29,6 +29,9 @@ public:
     void setSystem(Chip8* sys);
     void setPC(uint16_t value);
 
+    uint8_t extractVx(uint16_t mask);
+    uint8_t extractVy(uint16_t mask);
+
     // Instructions
     void opc_8xy0();
     void opc_8xy1();

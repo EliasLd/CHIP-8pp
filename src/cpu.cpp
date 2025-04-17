@@ -11,6 +11,17 @@ Cpu::Cpu()
 void Cpu::setSystem(Chip8* sys) { system = sys; }
 void Cpu::setPC(uint16_t value) { pc = value; }
 
+// Used to get Register X address value
+uint8_t Cpu::extractVx(uint16_t mask)
+{
+    return (opcode & mask) >> 8u;
+}
+// Used to get Register Y address value
+uint8_t Cpu::extractVy(uint16_t mask)
+{
+    return (opcode & mask) >> 4u;
+}
+
 // === Instructions ===
 
 // Arithmetic and logical instructions
@@ -19,8 +30,8 @@ void Cpu::setPC(uint16_t value) { pc = value; }
 // Set registers: vx = vy
 void Cpu::opc_8xy0() 
 {
-    uint8_t vx = (opcode & MASK_OPC_VX) >> 8u;
-    uint8_t vy = (opcode & MASK_OPC_VY) >> 4u;
+    uint8_t vx {extractVx(MASK_OPC_VX)};
+    uint8_t vy {extractVy(MASK_OPC_VY)};
 
     registers[vx] = registers[vy];
 }
