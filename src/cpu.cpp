@@ -76,3 +76,25 @@ void Cpu::opc_8xy4()
 
     registers[vx] = sum & MASK_LOWER_8BITS;
 }
+
+// SUB vx, vy
+void Cpu::opc_8xy5()
+{
+    uint8_t vx {extractVx(MASK_OPC_VX)};
+    uint8_t vy {extractVy(MASK_OPC_VY)};
+
+    // Register vf is set to 1 if vx > vy
+    registers[0xF] = (registers[vx] > registers[vy]) ? 1 : 0;
+
+    registers[vx] -= registers[vy];
+}
+
+// SHR vx
+void Cpu::opc_8xy6()
+{
+    uint8_t vx {extractVx(MASK_OPC_VX)};
+
+    registers[0xF] = (registers[vx] & MASK_LSB);
+
+    registers[vx] >>= 1;
+}
