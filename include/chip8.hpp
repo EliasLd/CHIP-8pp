@@ -19,9 +19,6 @@ private:
     uint8_t keypad[Chip8Specs::KeysCount] {};
     // 1D array representing a 2D screen
     uint32_t video[Chip8Specs::ScreenWidth * Chip8Specs::ScreeHeight] {};
-    // Operation code, represents an instruction that has
-    // to be executed by the cpu
-    uint16_t opcode {};
     RandomGenerator random_device {};
     Cpu cpu {};
 public:
