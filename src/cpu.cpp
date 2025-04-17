@@ -27,11 +27,38 @@ uint8_t Cpu::extractVy(uint16_t mask)
 // Arithmetic and logical instructions
 // between registers x and y
 
-// Set registers: vx = vy
+// LD vx, vy
 void Cpu::opc_8xy0() 
 {
     uint8_t vx {extractVx(MASK_OPC_VX)};
     uint8_t vy {extractVy(MASK_OPC_VY)};
 
     registers[vx] = registers[vy];
+}
+
+// OR vx, vy
+void Cpu::opc_8xy1()
+{
+    uint8_t vx {extractVx(MASK_OPC_VX)};
+    uint8_t vy {extractVy(MASK_OPC_VY)};
+
+    registers[vx] |= registers[vy];
+}
+
+// AND vx, vy
+void Cpu::opc_8xy2()
+{
+    uint8_t vx {extractVx(MASK_OPC_VX)};
+    uint8_t vy {extractVy(MASK_OPC_VY)};
+
+    registers[vx] &= registers[vy];
+}
+
+// XOR vx, vy
+void Cpu::opc_8xy3()
+{
+    uint8_t vx {extractVx(MASK_OPC_VX)};
+    uint8_t vy {extractVy(MASK_OPC_VY)};
+
+    registers[vx] ^= registers[vy];
 }
