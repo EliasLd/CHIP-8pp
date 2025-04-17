@@ -62,3 +62,17 @@ void Cpu::opc_8xy3()
 
     registers[vx] ^= registers[vy];
 }
+
+// ADD vx, vy
+void Cpu::opc_8xy4()
+{
+    uint8_t vx {extractVx(MASK_OPC_VX)};
+    uint8_t vy {extractVy(MASK_OPC_VY)};
+
+    uint16_t sum { registers[vx] + registers[vy] };
+
+    // Register vf will carry a flag is the sum overflows 255
+    registers[0xF] = (sum > MASK_LOWER_8BITS) ? 1 : 0;
+
+    registers[vx] = sum & MASK_LOWER_8BITS;
+}
