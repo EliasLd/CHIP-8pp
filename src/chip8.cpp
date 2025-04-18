@@ -15,6 +15,9 @@ Chip8::Chip8()
     cpu.setSystem(this);
 }
 
+// Accessors
+uint32_t* Chip8::getVideo() { return video; }
+
 void Chip8::loadRomIntoMemory(const std::string& filename)
 {
     // Open the file in binary mode

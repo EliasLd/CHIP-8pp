@@ -25,6 +25,8 @@ public:
     Chip8();
 
     void loadRomIntoMemory(const std::string& filename);
+
+    uint32_t* getVideo();
 };
 
 #endif
