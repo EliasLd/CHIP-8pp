@@ -43,6 +43,9 @@ public:
     void opc_8xy7();
     void opc_8xyE();
 
+    void opc_00E0();
+    void opc_00EE();
+
 };
 
 #endif
