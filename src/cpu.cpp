@@ -168,3 +168,22 @@ void Cpu::opc_2nnn()
     pc = address;
 }
 
+// SE vx, byte
+// Skip instruction if vx = kk
+void Cpu::opc_3xkk()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t byte { opcode & MASK_OPC_BYTE };
+
+    if(registers[vx] == byte) pc += 2;
+}
+
+// SNE vx, byte
+// Skip instruction if vx != kk
+void Cpu::opc_4xkk()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t byte { opcode & MASK_OPC_BYTE };
+
+    if(registers[vx] != byte) pc += 2;
+}
