@@ -46,6 +46,14 @@ public:
     void opc_00E0();
     void opc_00EE();
 
+    void opc_1nnn();
+    void opc_2nnn();
+    void opc_3xkk();
+    void opc_4xkk();
+    void opc_5xy0();
+    void opc_9xy0();
+    void opc_Bnnn();
+
 };
 
 #endif
