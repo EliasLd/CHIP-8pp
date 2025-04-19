@@ -145,3 +145,65 @@ void Cpu::opc_00EE()
     pc = stack[--sp];
 }
 
+/*
+    Flow control instructions
+    directly influences program's flow
+    (jump, subroutine call, skip...)
+*/
+
+// JP addr
+void Cpu::opc_1nnn()
+{
+    uint16_t address { static_cast<uint16_t>(opcode & MASK_OPC_ADDR) };
+    pc = address;
+}
+
+// CALL addr
+void Cpu::opc_2nnn()
+{
+    uint16_t address { static_cast<uint16_t>(opcode & MASK_OPC_ADDR) };
+
+    stack[sp] = pc;
+    ++sp;
+    pc = address;
+}
+
+// SE vx, byte
+// Skip instruction if vx = kk
+void Cpu::opc_3xkk()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t byte { static_cast<uint8_t>(opcode & MASK_OPC_BYTE) };
+
+    if(registers[vx] == byte) pc += 2;
+}
+
+// SNE vx, byte
+// Skip instruction if vx != kk
+void Cpu::opc_4xkk()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t byte { static_cast<uint8_t>(opcode & MASK_OPC_BYTE) };
+
+    if(registers[vx] != byte) pc += 2;
+}
+
+// SE vx, vy
+// Skip instruction if vx = vy
+void Cpu::opc_5xy0()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t vy { extractVy(MASK_OPC_VY) };
+
+    if(registers[vx] == registers[vy]) pc += 2;
+}
+
+// SNE vx, vy
+// Skip instruction if vx != vy
+void Cpu::opc_9xy0()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t vy { extractVy(MASK_OPC_VY) };
+
+    if(registers[vx] != registers[vy]) pc += 2;
+}
