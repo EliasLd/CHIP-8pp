@@ -154,14 +154,14 @@ void Cpu::opc_00EE()
 // JP addr
 void Cpu::opc_1nnn()
 {
-    uint16_t address { opcode & MASK_OPC_ADDR };
+    uint16_t address { static_cast<uint16_t>(opcode & MASK_OPC_ADDR) };
     pc = address;
 }
 
 // CALL addr
 void Cpu::opc_2nnn()
 {
-    uint16_t address { opcode & MASK_OPC_ADDR };
+    uint16_t address { static_cast<uint16_t>(opcode & MASK_OPC_ADDR) };
 
     stack[sp] = pc;
     ++sp;
@@ -173,7 +173,7 @@ void Cpu::opc_2nnn()
 void Cpu::opc_3xkk()
 {
     uint8_t vx { extractVx(MASK_OPC_VX) };
-    uint8_t byte { opcode & MASK_OPC_BYTE };
+    uint8_t byte { static_cast<uint8_t>(opcode & MASK_OPC_BYTE) };
 
     if(registers[vx] == byte) pc += 2;
 }
@@ -183,7 +183,7 @@ void Cpu::opc_3xkk()
 void Cpu::opc_4xkk()
 {
     uint8_t vx { extractVx(MASK_OPC_VX) };
-    uint8_t byte { opcode & MASK_OPC_BYTE };
+    uint8_t byte { static_cast<uint8_t>(opcode & MASK_OPC_BYTE) };
 
     if(registers[vx] != byte) pc += 2;
 }
