@@ -17,6 +17,10 @@ Chip8::Chip8()
 
 // Accessors
 uint32_t* Chip8::getVideo() { return video; }
+uint16_t Chip8::getIndexRegister() { return index_register; }
+
+// Mutators
+void Chip8::setIndexRegister(uint16_t value) { index_register = value; }
 
 void Chip8::loadRomIntoMemory(const std::string& filename)
 {
