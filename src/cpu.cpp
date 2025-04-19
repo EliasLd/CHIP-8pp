@@ -215,3 +215,23 @@ void Cpu::opc_Bnnn()
 
     pc = registers[0] + address;
 }
+
+// Memory & Registers instructions
+
+// LD vx, byte
+void Cpu::opc_6xkk()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t byte { static_cast<uint8_t>(opcode & MASK_OPC_BYTE) };
+
+    registers[vx] = byte;
+}
+
+// ADD vx, byte
+void Cpu::opc_7xkk()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t byte { static_cast<uint8_t>(opcode & MASK_OPC_BYTE) };
+
+    registers[vx] += byte;
+}
