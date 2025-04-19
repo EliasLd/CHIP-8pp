@@ -187,3 +187,23 @@ void Cpu::opc_4xkk()
 
     if(registers[vx] != byte) pc += 2;
 }
+
+// SE vx, vy
+// Skip instruction if vx = vy
+void Cpu::opc_5xy0()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t vy { extractVy(MASK_OPC_VY) };
+
+    if(registers[vx] == registers[vy]) pc += 2;
+}
+
+// SNE vx, vy
+// Skip instruction if vx != vy
+void Cpu::opc_9xy0()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t vy { extractVy(MASK_OPC_VY) };
+
+    if(registers[vx] != registers[vy]) pc += 2;
+}
