@@ -235,3 +235,19 @@ void Cpu::opc_7xkk()
 
     registers[vx] += byte;
 }
+
+// LD I, addr
+void Cpu::opc_Annn()
+{
+    uint16_t address { static_cast<uint16_t>(opcode & MASK_OPC_ADDR) };
+
+    system->setIndexRegister(address);
+}
+
+// ADD I, vx
+void Cpu::opc_Fx1E()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+
+    system->setIndexRegister(system->getIndexRegister() + registers[vx]);
+}
