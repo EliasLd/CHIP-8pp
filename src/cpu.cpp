@@ -207,3 +207,11 @@ void Cpu::opc_9xy0()
 
     if(registers[vx] != registers[vy]) pc += 2;
 }
+
+// JP addr, v0
+void Cpu::opc_Bnnn()
+{
+    uint16_t address { static_cast<uint16_t>(opcode & MASK_OPC_ADDR) };
+
+    pc = registers[0] + address;
+}
