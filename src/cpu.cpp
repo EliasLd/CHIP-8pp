@@ -145,3 +145,26 @@ void Cpu::opc_00EE()
     pc = stack[--sp];
 }
 
+/*
+    Flow control instructions
+    directly influences program's flow
+    (jump, subroutine call, skip...)
+*/
+
+// JP addr
+void Cpu::opc_1nnn()
+{
+    uint16_t address { opcode & MASK_OPC_ADDR };
+    pc = address;
+}
+
+// CALL addr
+void Cpu::opc_2nnn()
+{
+    uint16_t address { opcode & MASK_OPC_ADDR };
+
+    stack[sp] = pc;
+    ++sp;
+    pc = address;
+}
+
