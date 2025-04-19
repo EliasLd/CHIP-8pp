@@ -54,6 +54,14 @@ public:
     void opc_9xy0();
     void opc_Bnnn();
 
+    void opc_6xkk();
+    void opc_7xkk();
+    void opc_Annn();
+    void opc_Fx1E();
+    void opc_Fx55();
+    void opc_Fx65();
+    void opc_Fx33();
+    
 };
 
 #endif
