@@ -215,3 +215,76 @@ void Cpu::opc_Bnnn()
 
     pc = registers[0] + address;
 }
+
+// Memory & Registers instructions
+
+// LD vx, byte
+void Cpu::opc_6xkk()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t byte { static_cast<uint8_t>(opcode & MASK_OPC_BYTE) };
+
+    registers[vx] = byte;
+}
+
+// ADD vx, byte
+void Cpu::opc_7xkk()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t byte { static_cast<uint8_t>(opcode & MASK_OPC_BYTE) };
+
+    registers[vx] += byte;
+}
+
+// LD I, addr
+void Cpu::opc_Annn()
+{
+    uint16_t address { static_cast<uint16_t>(opcode & MASK_OPC_ADDR) };
+
+    system->setIndexRegister(address);
+}
+
+// ADD I, vx
+void Cpu::opc_Fx1E()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+
+    system->setIndexRegister(system->getIndexRegister() + registers[vx]);
+}
+
+// LD I, vx
+void Cpu::opc_Fx55()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+
+    for(uint8_t i {} ; i < vx ; ++i)
+        system->writeMemory(system->getIndexRegister() + i, registers[i]);
+}
+
+// LD vx, I
+void Cpu::opc_Fx65()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+
+    for(uint8_t i {} ; i < vx ; ++i)
+        registers[i] = system->getMemoryAt(system->getIndexRegister() + i);
+}
+
+// LD B, vx
+void Cpu::opc_Fx33()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t val { registers[vx] };
+
+    uint16_t index { system->getIndexRegister() };
+    // ones digit
+    system->writeMemory(index, val % 10);
+    val /= 10;
+
+    // tens digit
+    system->writeMemory(index + 1, val % 10);
+    val /= 10;
+
+    // hundreds digit
+    system->writeMemory(index + 2, val % 10);
+}

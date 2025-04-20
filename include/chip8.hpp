@@ -27,6 +27,12 @@ public:
     void loadRomIntoMemory(const std::string& filename);
 
     uint32_t* getVideo();
+    uint16_t getIndexRegister();
+    uint8_t getMemoryAt(uint8_t index);
+
+    void setIndexRegister(uint16_t value);
+    void writeMemory(uint8_t index, uint8_t value);
+
 };
 
 #endif
