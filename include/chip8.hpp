@@ -29,9 +29,13 @@ public:
     uint32_t* getVideo();
     uint16_t getIndexRegister();
     uint8_t getMemoryAt(uint8_t index);
+    uint8_t getDelayTimer();
+    uint8_t getSoundTimer();
 
     void setIndexRegister(uint16_t value);
     void writeMemory(uint8_t index, uint8_t value);
+    void setDelayTimer(uint8_t value);
+    void setSoundTimer(uint8_t value);
 
 };
 
