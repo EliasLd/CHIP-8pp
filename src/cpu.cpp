@@ -318,3 +318,42 @@ void Cpu::opc_Fx18()
 
     system->setSoundTimer(registers[vx]);
 }
+
+// SKP vx
+void Cpu::opc_Ex9E()
+{
+    uint8_t vx  { extractVx(MASK_OPC_VX) };
+    uint8_t key { registers[vx] };
+
+    if(key < Chip8Specs::KeysCount && system->getKeypad()[key])
+        pc += 2;
+}
+
+// SKNP vx
+void Cpu::opc_ExA1()
+{
+    uint8_t vx  { extractVx(MASK_OPC_VX) };
+    uint8_t key { registers[vx] };
+
+    if(key < Chip8Specs::KeysCount && !system->getKeypad()[key])
+        pc += 2;
+}
+
+// LD vx, K
+// Wait for a key press
+void Cpu::opc_Fx0A()
+{
+    uint8_t vx  { extractVx(MASK_OPC_VX) };
+    uint8_t* keypad { system->getKeypad() };
+
+    for(uint8_t i {} ; i < Chip8Specs::KeysCount ; ++i)
+    {
+        if(keypad[i])
+        {
+            registers[vx] = i;
+            return;
+        }
+    }
+
+    pc -= 2;
+}
