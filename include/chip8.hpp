@@ -27,6 +27,7 @@ public:
     void loadRomIntoMemory(const std::string& filename);
 
     uint32_t* getVideo();
+    uint8_t* getKeypad();
     uint16_t getIndexRegister();
     uint8_t getMemoryAt(uint8_t index);
     uint8_t getDelayTimer();

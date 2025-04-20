@@ -17,6 +17,7 @@ Chip8::Chip8()
 
 // Accessors
 uint32_t* Chip8::getVideo() { return video; }
+uint8_t* Chip8::getKeypad() { return keypad; }
 uint16_t Chip8::getIndexRegister() { return index_register; }
 uint8_t Chip8::getMemoryAt(uint8_t index) { return memory[index]; }
 uint8_t Chip8::getDelayTimer() { return delay_timer; }
