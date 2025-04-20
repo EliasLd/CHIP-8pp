@@ -288,3 +288,33 @@ void Cpu::opc_Fx33()
     // hundreds digit
     system->writeMemory(index + 2, val % 10);
 }
+
+/*
+    System & Peripheral instructions
+    including timers, keypad and sprite
+    manipulation
+*/
+
+// LD vx, DT
+void Cpu::opc_Fx07()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+
+    registers[vx] = system->getDelayTimer();
+}
+
+// LD DT, vx
+void Cpu::opc_Fx15()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+
+    system->setDelayTimer(registers[vx]);
+}
+
+// LD ST, vx
+void Cpu::opc_Fx18()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+
+    system->setSoundTimer(registers[vx]);
+}
