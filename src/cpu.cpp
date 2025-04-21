@@ -127,7 +127,7 @@ void Cpu::opc_8xyE()
 
 /*
     historically called system instructions
-    Used for clear the displaya and return 
+    Used for clear the display and return
     from an instruction
 */
 
@@ -287,6 +287,15 @@ void Cpu::opc_Fx33()
 
     // hundreds digit
     system->writeMemory(index + 2, val % 10);
+}
+
+// RND vx, byte
+void Cpu::opc_Cxkk()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t byte { static_cast<uint8_t>(opcode & MASK_OPC_BYTE) };
+
+    registers[vx] = system->getRandomByte() & byte;
 }
 
 /*

@@ -61,6 +61,7 @@ public:
     void opc_Fx55();
     void opc_Fx65();
     void opc_Fx33();
+    void opc_Cxkk();
 
     void opc_Fx07();
     void opc_Fx15();

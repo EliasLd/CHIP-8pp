@@ -32,6 +32,7 @@ public:
     uint8_t getMemoryAt(uint8_t index);
     uint8_t getDelayTimer();
     uint8_t getSoundTimer();
+    uint8_t getRandomByte();
 
     void setIndexRegister(uint16_t value);
     void writeMemory(uint8_t index, uint8_t value);
