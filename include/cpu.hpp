@@ -23,6 +23,12 @@ private:
     // Reference to the Chip8 system
     // used to simplify memory access
     Chip8* system {nullptr};
+    // alias for pointer to a Cpu member function
+    // of type void with no argument
+    using CpuInstruction = void (Cpu::*)();
+    // function pointer table. Will contain
+    // references to instructions
+    CpuInstruction table[0xF + 1] {};
 public: 
     Cpu();
 
