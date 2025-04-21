@@ -22,6 +22,7 @@ uint16_t Chip8::getIndexRegister() { return index_register; }
 uint8_t Chip8::getMemoryAt(uint8_t index) { return memory[index]; }
 uint8_t Chip8::getDelayTimer() { return delay_timer; }
 uint8_t Chip8::getSoundTimer() { return sound_timer; }
+uint8_t Chip8::getRandomByte() { return random_device.get(); }
 
 // Mutators
 void Chip8::setIndexRegister(uint16_t value) { index_register = value; }
