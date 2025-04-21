@@ -71,6 +71,12 @@ public:
     void opc_Fx0A();
     void opc_Dxyn();
     void opc_Fx29();
+
+    void dispatchInstructions();
+    void handle0Instructions();
+    void handle8Instructions();
+    void handleEInstructions();
+    void handleFInstructions();
     
 };
 
