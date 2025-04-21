@@ -357,3 +357,55 @@ void Cpu::opc_Fx0A()
 
     pc -= 2;
 }
+
+// DRW vx, vy, nibble
+// Display a sprite of size n at (vx, vy)
+// starting at memory location index_register
+void Cpu::opc_Dxyn()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t vy { extractVy(MASK_OPC_VY) };
+    uint8_t sprite_height { static_cast<uint8_t>(opcode & MASK_OPC_NIBBLE) };
+
+    // Wrap to avoid overflow screen boundaries
+    uint8_t x_cord = registers[vx] % Chip8Specs::ScreeHeight;
+    uint8_t y_cord = registers[vy] % Chip8Specs::ScreeHeight;
+
+    registers[0xF] = 0;
+
+    for(uint row {} ; row < sprite_height ; ++row)
+    {
+        uint8_t sprite_byte { system->getMemoryAt(system->getIndexRegister() + row) };
+
+        for(uint col {}  ; col < Chip8Specs::SpriteWidth ; ++col)
+        {
+            uint8_t sprite_pixel = sprite_byte & (0x80u >> col) ;
+            uint32_t* video { system->getVideo() };
+            uint32_t* screen_pixel { &video[(y_cord + row) * Chip8Specs::ScreenWidth + (x_cord + col)] };
+
+            if(sprite_pixel)
+            {
+                if(*screen_pixel == Chip8Specs::PixelOn)
+                {
+                    // sprite pixel and screen pixel are both on
+                    // -> there's a collision
+                    registers[0xF] = 1;
+                }
+
+                *screen_pixel ^= Chip8Specs::PixelOn;
+            }
+        }
+    }
+}
+
+// LD F, vx
+void Cpu::opc_Fx29()
+{
+    uint8_t vx { extractVx(MASK_OPC_VX) };
+    uint8_t digit { registers[vx] };
+
+    // font characters are 5 bytes long
+    uint16_t sprite_first_char_location = Chip8Specs::FontSetStartAddress + (Chip8Specs::FontCharSize * digit);
+
+    system->setIndexRegister(sprite_first_char_location);
+}
