@@ -4,6 +4,8 @@
 #include <cstdint>
 #include "constants.hpp"
 
+class Chip8;
+
 class Cpu {
 private:
     uint8_t registers[Chip8Specs::RegisterCount] {};
@@ -15,10 +17,60 @@ private:
     // stack pointer, keeps track of the most
     // recent value placed in the stack
     uint8_t sp {};
+    // Operation code, represents an instruction that has
+    // to be executed by the cpu
+    uint16_t opcode {};
+    // Reference to the Chip8 system
+    // used to simplify memory access
+    Chip8* system {nullptr};
 public: 
     Cpu();
 
+    void setSystem(Chip8* sys);
     void setPC(uint16_t value);
+
+    uint8_t extractVx(uint16_t mask);
+    uint8_t extractVy(uint16_t mask);
+
+    // Instructions
+    void opc_8xy0();
+    void opc_8xy1();
+    void opc_8xy2();
+    void opc_8xy3();
+    void opc_8xy4();
+    void opc_8xy5();
+    void opc_8xy6();
+    void opc_8xy7();
+    void opc_8xyE();
+
+    void opc_00E0();
+    void opc_00EE();
+
+    void opc_1nnn();
+    void opc_2nnn();
+    void opc_3xkk();
+    void opc_4xkk();
+    void opc_5xy0();
+    void opc_9xy0();
+    void opc_Bnnn();
+
+    void opc_6xkk();
+    void opc_7xkk();
+    void opc_Annn();
+    void opc_Fx1E();
+    void opc_Fx55();
+    void opc_Fx65();
+    void opc_Fx33();
+
+    void opc_Fx07();
+    void opc_Fx15();
+    void opc_Fx18();
+    void opc_Ex9E();
+    void opc_ExA1();
+    void opc_Fx0A();
+    void opc_Dxyn();
+    void opc_Fx29();
+    
 };
 
 #endif

@@ -19,15 +19,25 @@ private:
     uint8_t keypad[Chip8Specs::KeysCount] {};
     // 1D array representing a 2D screen
     uint32_t video[Chip8Specs::ScreenWidth * Chip8Specs::ScreeHeight] {};
-    // Operation code, represents an instruction that has
-    // to be executed by the cpu
-    uint16_t opcode {};
     RandomGenerator random_device {};
     Cpu cpu {};
 public:
     Chip8();
 
     void loadRomIntoMemory(const std::string& filename);
+
+    uint32_t* getVideo();
+    uint8_t* getKeypad();
+    uint16_t getIndexRegister();
+    uint8_t getMemoryAt(uint8_t index);
+    uint8_t getDelayTimer();
+    uint8_t getSoundTimer();
+
+    void setIndexRegister(uint16_t value);
+    void writeMemory(uint8_t index, uint8_t value);
+    void setDelayTimer(uint8_t value);
+    void setSoundTimer(uint8_t value);
+
 };
 
 #endif

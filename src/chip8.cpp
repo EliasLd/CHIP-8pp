@@ -10,7 +10,24 @@ Chip8::Chip8()
     {
         memory[Chip8Specs::FontSetStartAddress + i] = Chip8Specs::FontSet[i];
     }
+
+    // Bind the system to the cpu
+    cpu.setSystem(this);
 }
+
+// Accessors
+uint32_t* Chip8::getVideo() { return video; }
+uint8_t* Chip8::getKeypad() { return keypad; }
+uint16_t Chip8::getIndexRegister() { return index_register; }
+uint8_t Chip8::getMemoryAt(uint8_t index) { return memory[index]; }
+uint8_t Chip8::getDelayTimer() { return delay_timer; }
+uint8_t Chip8::getSoundTimer() { return sound_timer; }
+
+// Mutators
+void Chip8::setIndexRegister(uint16_t value) { index_register = value; }
+void Chip8::writeMemory(uint8_t index, uint8_t value) { memory[index] = value; }
+void Chip8::setDelayTimer(uint8_t value) { delay_timer = value; }
+void Chip8::setSoundTimer(uint8_t value) { sound_timer = value; }
 
 void Chip8::loadRomIntoMemory(const std::string& filename)
 {

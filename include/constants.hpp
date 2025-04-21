@@ -20,9 +20,13 @@ namespace Chip8Specs
     // === Pixels ===
     constexpr uint32_t PixelOn  {0xFFFFFFFF};
     constexpr uint32_t PixelOff {0x00000000};
+
+    // === Sprite ===
+    constexpr int SpriteWidth {8};
     
     // === Fontset ===
-    constexpr unsigned int FontsetSize {80};
+    constexpr unsigned int FontsetSize  {80};
+    constexpr unsigned int FontCharSize {5};
     constexpr uint8_t FontSet[FontsetSize]
     {
         0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
