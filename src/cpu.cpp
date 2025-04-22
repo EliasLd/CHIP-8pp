@@ -418,3 +418,83 @@ void Cpu::opc_Fx29()
 
     system->setIndexRegister(sprite_first_char_location);
 }
+
+// === Instruction dispatching & opcode decoding ===
+/*
+    A pointer table is used to correctly
+    bind opcode and instructions
+*/
+
+void Cpu::dispatchInstructions()
+{
+    table[0x0] = &Cpu::handle0Instructions;
+    table[0x1] = &Cpu::opc_1nnn;
+    table[0x2] = &Cpu::opc_2nnn;
+    table[0x3] = &Cpu::opc_3xkk;
+    table[0x4] = &Cpu::opc_4xkk;
+    table[0x5] = &Cpu::opc_5xy0;
+    table[0x6] = &Cpu::opc_6xkk;
+    table[0x7] = &Cpu::opc_7xkk;
+    table[0x8] = &Cpu::handle8Instructions;
+    table[0x9] = &Cpu::opc_9xy0;
+    table[0xA] = &Cpu::opc_Annn;
+    table[0xB] = &Cpu::opc_Bnnn;
+    table[0xC] = &Cpu::opc_Cxkk;
+    table[0xD] = &Cpu::opc_Dxyn;
+    table[0xE] = &Cpu::handleEInstructions;
+    table[0xF] = &Cpu::handleFInstructions;
+}
+
+void Cpu::handle0Instructions()
+{
+    switch(opcode & 0x00FFu)
+    {
+    case 0xE0: return opc_00E0();
+    case 0xEE: return opc_00EE();
+    default: break;
+    }
+}
+
+void Cpu::handle8Instructions()
+{
+    switch (opcode & 0x000Fu)
+    {
+    case 0x0: return opc_8xy0();
+    case 0x1: return opc_8xy1();
+    case 0x2: return opc_8xy2();
+    case 0x3: return opc_8xy3();
+    case 0x4: return opc_8xy4();
+    case 0x5: return opc_8xy5();
+    case 0x6: return opc_8xy6();
+    case 0x7: return opc_8xy7();
+    case 0xE: return opc_8xyE();
+    default: break;
+    }
+}
+
+void Cpu::handleEInstructions()
+{
+    switch (opcode & 0x00FFu)
+    {
+    case 0x9E: return opc_Ex9E();
+    case 0xA1: return opc_ExA1();
+    default: break;
+    }
+}
+
+void Cpu::handleFInstructions()
+{
+    switch (opcode & 0x00FFu)
+    {
+    case 0x07: return opc_Fx07();
+    case 0x0A: return opc_Fx0A();
+    case 0x15: return opc_Fx15();
+    case 0x18: return opc_Fx18();
+    case 0x1E: return opc_Fx1E();
+    case 0x29: return opc_Fx29();
+    case 0x33: return opc_Fx33();
+    case 0x55: return opc_Fx55();
+    case 0x65: return opc_Fx65();
+    default: break;
+    }
+}
