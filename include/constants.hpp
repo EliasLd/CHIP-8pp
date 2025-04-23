@@ -10,7 +10,7 @@ namespace Chip8Specs
     constexpr int RegisterCount {16};
     constexpr int StackDepth    {16};
     constexpr int ScreenWidth   {64};
-    constexpr int ScreeHeight   {32};
+    constexpr int ScreenHeight   {32};
     constexpr int KeysCount     {16};
 
     // === Memory Mapping === 

@@ -135,7 +135,7 @@ void Cpu::opc_8xyE()
 void Cpu::opc_00E0()
 {
     uint32_t* video { system->getVideo() };
-    constexpr size_t buffer_size { Chip8Specs::ScreenWidth * Chip8Specs::ScreeHeight };
+    constexpr size_t buffer_size { Chip8Specs::ScreenWidth * Chip8Specs::ScreenHeight };
     std::memset(video, 0, buffer_size * sizeof(uint32_t));
 }
 
@@ -378,7 +378,7 @@ void Cpu::opc_Dxyn()
 
     // Wrap to avoid overflow screen boundaries
     uint8_t x_cord = registers[vx] % Chip8Specs::ScreenWidth;
-    uint8_t y_cord = registers[vy] % Chip8Specs::ScreeHeight;
+    uint8_t y_cord = registers[vy] % Chip8Specs::ScreenHeight;
 
     registers[0xF] = 0;
 
