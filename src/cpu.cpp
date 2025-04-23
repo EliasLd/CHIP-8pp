@@ -377,7 +377,7 @@ void Cpu::opc_Dxyn()
     uint8_t sprite_height { static_cast<uint8_t>(opcode & MASK_OPC_NIBBLE) };
 
     // Wrap to avoid overflow screen boundaries
-    uint8_t x_cord = registers[vx] % Chip8Specs::ScreeHeight;
+    uint8_t x_cord = registers[vx] % Chip8Specs::ScreenWidth;
     uint8_t y_cord = registers[vy] % Chip8Specs::ScreeHeight;
 
     registers[0xF] = 0;
