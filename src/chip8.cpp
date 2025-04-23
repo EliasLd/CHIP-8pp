@@ -50,3 +50,11 @@ void Chip8::loadRomIntoMemory(const std::string& filename)
     for(std::streamsize i {} ; i < rom_size ; ++i)
         memory[Chip8Specs::ProgramStartAddress + i] = buffer[i];
 }
+
+void Chip8::Cycle()
+{
+    cpu.Cycle();
+
+    if(delay_timer > 0) --delay_timer;
+    if(sound_timer > 0) --sound_timer;
+}

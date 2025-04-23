@@ -39,6 +39,8 @@ public:
     void setDelayTimer(uint8_t value);
     void setSoundTimer(uint8_t value);
 
+    void Cycle();
+
 };
 
 #endif
