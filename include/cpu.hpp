@@ -83,6 +83,8 @@ public:
     void handle8Instructions();
     void handleEInstructions();
     void handleFInstructions();
+
+    void Cycle();
     
 };
 

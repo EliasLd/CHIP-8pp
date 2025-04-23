@@ -498,3 +498,17 @@ void Cpu::handleFInstructions()
     default: break;
     }
 }
+
+void Cpu::Cycle()
+{
+    // Fetch opcode from memory
+    opcode = (system->getMemoryAt(pc) << 8u) | system->getMemoryAt(pc + 1);
+
+    pc += 2;
+
+    // Decode the instruction
+    uint8_t instruction_id = (opcode & 0xF000u) >> 12;
+
+    // Execute
+    (this->*table[instruction_id])();
+}
