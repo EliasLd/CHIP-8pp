@@ -38,6 +38,7 @@ public:
     void writeMemory(uint8_t index, uint8_t value);
     void setDelayTimer(uint8_t value);
     void setSoundTimer(uint8_t value);
+    void setKeypad(int index, uint8_t value);
 
     void Cycle();
 
