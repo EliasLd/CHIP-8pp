@@ -3,11 +3,13 @@
 #include "masks.hpp"
 
 #include <cstring>
+#include <iostream>
 
 Cpu::Cpu()
 {
     // Initialize the program counter
     setPC(Chip8Specs::ProgramStartAddress);
+    dispatchInstructions();
 }
 
 void Cpu::setSystem(Chip8* sys) { system = sys; }
@@ -503,11 +505,16 @@ void Cpu::Cycle()
 {
     // Fetch opcode from memory
     opcode = (system->getMemoryAt(pc) << 8u) | system->getMemoryAt(pc + 1);
-
     pc += 2;
 
     // Decode the instruction
-    uint8_t instruction_id = (opcode & 0xF000u) >> 12;
+    uint8_t instruction_id = (opcode & 0xF000u) >> 12u;
+
+    if (table[instruction_id] == nullptr) {
+        std::cerr << "Unknown instruction ID: " << std::hex << instruction_id
+                  << " from opcode "            << std::hex << opcode << '\n';
+        return;
+    }
 
     // Execute
     (this->*table[instruction_id])();
