@@ -29,7 +29,7 @@ public:
     uint32_t* getVideo();
     uint8_t* getKeypad();
     uint16_t getIndexRegister();
-    uint8_t getMemoryAt(uint8_t index);
+    uint8_t getMemoryAt(uint16_t index);
     uint8_t getDelayTimer();
     uint8_t getSoundTimer();
     uint8_t getRandomByte();

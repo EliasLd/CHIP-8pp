@@ -1,6 +1,7 @@
 #include "chip8.hpp"
 
 #include <fstream>
+#include <iostream>
 #include <stdexcept>
 
 Chip8::Chip8()
@@ -19,7 +20,18 @@ Chip8::Chip8()
 uint32_t* Chip8::getVideo() { return video; }
 uint8_t* Chip8::getKeypad() { return keypad; }
 uint16_t Chip8::getIndexRegister() { return index_register; }
-uint8_t Chip8::getMemoryAt(uint8_t index) { return memory[index]; }
+
+uint8_t Chip8::getMemoryAt(uint16_t index)
+{
+    if (index >= Chip8Specs::MemorySize)
+    {
+        std::cerr << "Read out of bounds at address: " << std::hex << index << "\n";
+        return 0;
+    }
+
+    return memory[index];
+}
+
 uint8_t Chip8::getDelayTimer() { return delay_timer; }
 uint8_t Chip8::getSoundTimer() { return sound_timer; }
 uint8_t Chip8::getRandomByte() { return random_device.get(); }
