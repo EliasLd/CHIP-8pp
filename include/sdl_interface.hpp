@@ -20,6 +20,7 @@ public:
     ~SdlInterface();
 
     bool HandleKeyInput();
+    void Update(int pitch);
 };
 
 #endif

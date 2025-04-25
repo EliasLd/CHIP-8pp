@@ -53,3 +53,11 @@ bool SdlInterface::HandleKeyInput()
 
     return quit;
 }
+
+void SdlInterface::Update(int pitch)
+{
+    SDL_UpdateTexture(texture, nullptr, system->getVideo(), pitch);
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, texture, nullptr, nullptr);
+    SDL_RenderPresent(renderer);
+}
