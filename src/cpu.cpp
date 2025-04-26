@@ -430,7 +430,10 @@ void Cpu::opc_Dxyn()
         {
             uint8_t sprite_pixel = sprite_byte & (0x80u >> col) ;
             uint32_t* video { system->getVideo() };
-            uint32_t* screen_pixel { &video[(y_cord + row) * Chip8Specs::ScreenWidth + (x_cord + col)] };
+            uint32_t* screen_pixel { &video[
+                ((y_cord + row) % Chip8Specs::ScreenHeight) * Chip8Specs::ScreenWidth +
+                ((x_cord + col) % Chip8Specs::ScreenWidth)
+            ]};
 
             if(sprite_pixel)
             {
