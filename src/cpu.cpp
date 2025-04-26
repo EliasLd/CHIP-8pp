@@ -274,8 +274,10 @@ void Cpu::opc_Fx55()
 {
     uint8_t vx { extractVx(MASK_OPC_VX) };
 
-    for(uint8_t i {} ; i < vx ; ++i)
+    for(uint8_t i {} ; i <= vx ; ++i)
         system->writeMemory(system->getIndexRegister() + i, registers[i]);
+
+    system->setIndexRegister(system->getIndexRegister() + vx + 1);
 }
 
 // LD vx, I
@@ -283,8 +285,10 @@ void Cpu::opc_Fx65()
 {
     uint8_t vx { extractVx(MASK_OPC_VX) };
 
-    for(uint8_t i {} ; i < vx ; ++i)
+    for(uint8_t i {} ; i <= vx ; ++i)
         registers[i] = system->getMemoryAt(system->getIndexRegister() + i);
+
+    system->setIndexRegister(system->getIndexRegister() + vx + 1);
 }
 
 // LD B, vx
@@ -295,7 +299,7 @@ void Cpu::opc_Fx33()
 
     uint16_t index { system->getIndexRegister() };
     // ones digit
-    system->writeMemory(index, val % 10);
+    system->writeMemory(index + 2, val % 10);
     val /= 10;
 
     // tens digit
@@ -303,7 +307,7 @@ void Cpu::opc_Fx33()
     val /= 10;
 
     // hundreds digit
-    system->writeMemory(index + 2, val % 10);
+    system->writeMemory(index, val % 10);
 }
 
 // RND vx, byte
