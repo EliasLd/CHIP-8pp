@@ -35,7 +35,7 @@ public:
     uint8_t getRandomByte();
 
     void setIndexRegister(uint16_t value);
-    void writeMemory(uint8_t index, uint8_t value);
+    void writeMemory(uint16_t index, uint8_t value);
     void setDelayTimer(uint8_t value);
     void setSoundTimer(uint8_t value);
     void setKeypad(int index, uint8_t value);
