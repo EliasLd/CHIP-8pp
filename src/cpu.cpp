@@ -373,19 +373,38 @@ void Cpu::opc_ExA1()
 // Wait for a key press
 void Cpu::opc_Fx0A()
 {
-    uint8_t vx  { extractVx(MASK_OPC_VX) };
-    uint8_t* keypad { system->getKeypad() };
+    static bool key_was_pressed = false;
+    static uint8_t last_key = 0;
 
-    for(uint8_t i {} ; i < Chip8Specs::KeysCount ; ++i)
+    uint8_t vx = extractVx(MASK_OPC_VX);
+    uint8_t* keypad = system->getKeypad();
+
+    if (!key_was_pressed)
     {
-        if(keypad[i])
+        // We look for an eventual pressed key
+        for (uint8_t i {} ; i < Chip8Specs::KeysCount; ++i)
         {
-            registers[vx] = i;
-            return;
+            if (keypad[i])
+            {
+                last_key = i;
+                key_was_pressed = true;
+                break;
+            }
         }
-    }
 
-    pc -= 2;
+        // No key pressed yet, loop again
+        if (!key_was_pressed) pc -= 2;
+    }
+    else
+    {
+        // Key pressed, wait for it to be released
+        if (!keypad[last_key])
+        {
+            registers[vx] = last_key;
+            key_was_pressed = false;
+        }
+        else pc -= 2;
+    }
 }
 
 // DRW vx, vy, nibble
