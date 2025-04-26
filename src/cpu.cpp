@@ -78,10 +78,10 @@ void Cpu::opc_8xy4()
 
     uint16_t sum { static_cast<uint16_t>(registers[vx] + registers[vy]) };
 
-    // Register vf will carry a flag is the sum overflows 255
-    registers[0xF] = (sum > MASK_LOWER_8BITS) ? 1 : 0;
-
     registers[vx] = sum & MASK_LOWER_8BITS;
+
+    // Register vf will carry a flag if the sum overflows 255
+    registers[0xF] = (sum > MASK_LOWER_8BITS) ? 1 : 0;
 }
 
 // SUB vx, vy
@@ -90,21 +90,28 @@ void Cpu::opc_8xy5()
     uint8_t vx {extractVx(MASK_OPC_VX)};
     uint8_t vy {extractVy(MASK_OPC_VY)};
 
-    // Register vf is set to 1 if vx > vy
-    registers[0xF] = (registers[vx] > registers[vy]) ? 1 : 0;
+    uint8_t tmp { registers[vx] };
 
     registers[vx] -= registers[vy];
+
+    // Register vf is set to 1 if vx > vy
+    registers[0xF] = (tmp >= registers[vy]) ? 1 : 0;
 }
 
 // SHR vx
 void Cpu::opc_8xy6()
 {
     uint8_t vx {extractVx(MASK_OPC_VX)};
+    uint8_t vy {extractVy(MASK_OPC_VY)};
+
+    uint8_t old_vx { registers[vx] };
+
+    uint8_t shifted_vy { registers[vy] >>= 1 };
+
+    registers[vx] = shifted_vy;
 
     // Save least significant bit 
-    registers[0xF] = (registers[vx] & MASK_LSB);
-
-    registers[vx] >>= 1;
+    registers[0xF] = (old_vx & MASK_LSB);
 }
 
 // SUBN vx, vy
@@ -113,19 +120,24 @@ void Cpu::opc_8xy7()
     uint8_t vx {extractVx(MASK_OPC_VX)};
     uint8_t vy {extractVy(MASK_OPC_VY)};
 
-    registers[0xF] = (registers[vy] > registers[vx]) ? 1 : 0;
-
     registers[vx] = registers[vy] - registers[vx];
+
+    registers[0xF] = (registers[vy] >= registers[vx]) ? 1 : 0;
 }
 
 // SHL vx
 void Cpu::opc_8xyE()
 {
     uint8_t vx {extractVx(MASK_OPC_VX)};
+    uint8_t vy {extractVy(MASK_OPC_VY)};
 
-    registers[0xF] = (registers[vx] & MASK_MSB) >> 7u;
+    uint8_t old_vx { registers[vx] };
 
-    registers[vx] <<= 1;
+    uint8_t shifted_vy { registers[vy] <<= 1 };
+
+    registers[vx] = shifted_vy;
+
+    registers[0xF] = (old_vx & MASK_MSB) >> 7u;
 }
 
 // Machine instructions
