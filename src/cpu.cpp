@@ -3,11 +3,13 @@
 #include "masks.hpp"
 
 #include <cstring>
+#include <iostream>
 
 Cpu::Cpu()
 {
     // Initialize the program counter
     setPC(Chip8Specs::ProgramStartAddress);
+    dispatchInstructions();
 }
 
 void Cpu::setSystem(Chip8* sys) { system = sys; }
@@ -45,6 +47,7 @@ void Cpu::opc_8xy1()
     uint8_t vy {extractVy(MASK_OPC_VY)};
 
     registers[vx] |= registers[vy];
+    registers[0xF] = 0;
 }
 
 // AND vx, vy
@@ -54,6 +57,7 @@ void Cpu::opc_8xy2()
     uint8_t vy {extractVy(MASK_OPC_VY)};
 
     registers[vx] &= registers[vy];
+    registers[0xF] = 0;
 }
 
 // XOR vx, vy
@@ -63,6 +67,7 @@ void Cpu::opc_8xy3()
     uint8_t vy {extractVy(MASK_OPC_VY)};
 
     registers[vx] ^= registers[vy];
+    registers[0xF] = 0;
 }
 
 // ADD vx, vy
@@ -73,10 +78,10 @@ void Cpu::opc_8xy4()
 
     uint16_t sum { static_cast<uint16_t>(registers[vx] + registers[vy]) };
 
-    // Register vf will carry a flag is the sum overflows 255
-    registers[0xF] = (sum > MASK_LOWER_8BITS) ? 1 : 0;
-
     registers[vx] = sum & MASK_LOWER_8BITS;
+
+    // Register vf will carry a flag if the sum overflows 255
+    registers[0xF] = (sum > MASK_LOWER_8BITS) ? 1 : 0;
 }
 
 // SUB vx, vy
@@ -85,21 +90,28 @@ void Cpu::opc_8xy5()
     uint8_t vx {extractVx(MASK_OPC_VX)};
     uint8_t vy {extractVy(MASK_OPC_VY)};
 
-    // Register vf is set to 1 if vx > vy
-    registers[0xF] = (registers[vx] > registers[vy]) ? 1 : 0;
+    uint8_t tmp { registers[vx] };
 
     registers[vx] -= registers[vy];
+
+    // Register vf is set to 1 if vx > vy
+    registers[0xF] = (tmp >= registers[vy]) ? 1 : 0;
 }
 
 // SHR vx
 void Cpu::opc_8xy6()
 {
     uint8_t vx {extractVx(MASK_OPC_VX)};
+    uint8_t vy {extractVy(MASK_OPC_VY)};
+
+    uint8_t old_vx { registers[vx] };
+
+    uint8_t shifted_vy { registers[vy] >>= 1 };
+
+    registers[vx] = shifted_vy;
 
     // Save least significant bit 
-    registers[0xF] = (registers[vx] & MASK_LSB);
-
-    registers[vx] >>= 1;
+    registers[0xF] = (old_vx & MASK_LSB);
 }
 
 // SUBN vx, vy
@@ -108,19 +120,24 @@ void Cpu::opc_8xy7()
     uint8_t vx {extractVx(MASK_OPC_VX)};
     uint8_t vy {extractVy(MASK_OPC_VY)};
 
-    registers[0xF] = (registers[vy] > registers[vx]) ? 1 : 0;
-
     registers[vx] = registers[vy] - registers[vx];
+
+    registers[0xF] = (registers[vy] >= registers[vx]) ? 1 : 0;
 }
 
 // SHL vx
 void Cpu::opc_8xyE()
 {
     uint8_t vx {extractVx(MASK_OPC_VX)};
+    uint8_t vy {extractVy(MASK_OPC_VY)};
 
-    registers[0xF] = (registers[vx] & MASK_MSB) >> 7u;
+    uint8_t old_vx { registers[vx] };
 
-    registers[vx] <<= 1;
+    uint8_t shifted_vy { registers[vy] <<= 1 };
+
+    registers[vx] = shifted_vy;
+
+    registers[0xF] = (old_vx & MASK_MSB) >> 7u;
 }
 
 // Machine instructions
@@ -257,8 +274,10 @@ void Cpu::opc_Fx55()
 {
     uint8_t vx { extractVx(MASK_OPC_VX) };
 
-    for(uint8_t i {} ; i < vx ; ++i)
+    for(uint8_t i {} ; i <= vx ; ++i)
         system->writeMemory(system->getIndexRegister() + i, registers[i]);
+
+    system->setIndexRegister(system->getIndexRegister() + vx + 1);
 }
 
 // LD vx, I
@@ -266,8 +285,10 @@ void Cpu::opc_Fx65()
 {
     uint8_t vx { extractVx(MASK_OPC_VX) };
 
-    for(uint8_t i {} ; i < vx ; ++i)
+    for(uint8_t i {} ; i <= vx ; ++i)
         registers[i] = system->getMemoryAt(system->getIndexRegister() + i);
+
+    system->setIndexRegister(system->getIndexRegister() + vx + 1);
 }
 
 // LD B, vx
@@ -278,7 +299,7 @@ void Cpu::opc_Fx33()
 
     uint16_t index { system->getIndexRegister() };
     // ones digit
-    system->writeMemory(index, val % 10);
+    system->writeMemory(index + 2, val % 10);
     val /= 10;
 
     // tens digit
@@ -286,7 +307,7 @@ void Cpu::opc_Fx33()
     val /= 10;
 
     // hundreds digit
-    system->writeMemory(index + 2, val % 10);
+    system->writeMemory(index, val % 10);
 }
 
 // RND vx, byte
@@ -352,19 +373,38 @@ void Cpu::opc_ExA1()
 // Wait for a key press
 void Cpu::opc_Fx0A()
 {
-    uint8_t vx  { extractVx(MASK_OPC_VX) };
-    uint8_t* keypad { system->getKeypad() };
+    static bool key_was_pressed = false;
+    static uint8_t last_key = 0;
 
-    for(uint8_t i {} ; i < Chip8Specs::KeysCount ; ++i)
+    uint8_t vx = extractVx(MASK_OPC_VX);
+    uint8_t* keypad = system->getKeypad();
+
+    if (!key_was_pressed)
     {
-        if(keypad[i])
+        // We look for an eventual pressed key
+        for (uint8_t i {} ; i < Chip8Specs::KeysCount; ++i)
         {
-            registers[vx] = i;
-            return;
+            if (keypad[i])
+            {
+                last_key = i;
+                key_was_pressed = true;
+                break;
+            }
         }
-    }
 
-    pc -= 2;
+        // No key pressed yet, loop again
+        if (!key_was_pressed) pc -= 2;
+    }
+    else
+    {
+        // Key pressed, wait for it to be released
+        if (!keypad[last_key])
+        {
+            registers[vx] = last_key;
+            key_was_pressed = false;
+        }
+        else pc -= 2;
+    }
 }
 
 // DRW vx, vy, nibble
@@ -390,7 +430,10 @@ void Cpu::opc_Dxyn()
         {
             uint8_t sprite_pixel = sprite_byte & (0x80u >> col) ;
             uint32_t* video { system->getVideo() };
-            uint32_t* screen_pixel { &video[(y_cord + row) * Chip8Specs::ScreenWidth + (x_cord + col)] };
+            uint32_t* screen_pixel { &video[
+                ((y_cord + row) % Chip8Specs::ScreenHeight) * Chip8Specs::ScreenWidth +
+                ((x_cord + col) % Chip8Specs::ScreenWidth)
+            ]};
 
             if(sprite_pixel)
             {
@@ -503,11 +546,16 @@ void Cpu::Cycle()
 {
     // Fetch opcode from memory
     opcode = (system->getMemoryAt(pc) << 8u) | system->getMemoryAt(pc + 1);
-
     pc += 2;
 
     // Decode the instruction
-    uint8_t instruction_id = (opcode & 0xF000u) >> 12;
+    uint8_t instruction_id = (opcode & 0xF000u) >> 12u;
+
+    if (table[instruction_id] == nullptr) {
+        std::cerr << "Unknown instruction ID: " << std::hex << instruction_id
+                  << " from opcode "            << std::hex << opcode << '\n';
+        return;
+    }
 
     // Execute
     (this->*table[instruction_id])();
