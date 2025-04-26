@@ -47,6 +47,7 @@ void Cpu::opc_8xy1()
     uint8_t vy {extractVy(MASK_OPC_VY)};
 
     registers[vx] |= registers[vy];
+    registers[0xF] = 0;
 }
 
 // AND vx, vy
@@ -56,6 +57,7 @@ void Cpu::opc_8xy2()
     uint8_t vy {extractVy(MASK_OPC_VY)};
 
     registers[vx] &= registers[vy];
+    registers[0xF] = 0;
 }
 
 // XOR vx, vy
@@ -65,6 +67,7 @@ void Cpu::opc_8xy3()
     uint8_t vy {extractVy(MASK_OPC_VY)};
 
     registers[vx] ^= registers[vy];
+    registers[0xF] = 0;
 }
 
 // ADD vx, vy
