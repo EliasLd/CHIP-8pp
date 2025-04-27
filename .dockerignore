@@ -1,0 +1,7 @@
+# Ignore all build files
+build/
+external/sdl2-subbuild/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
