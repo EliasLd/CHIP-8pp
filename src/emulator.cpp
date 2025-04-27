@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
         std::cerr << e.what() << "\n";
         return EXIT_FAILURE;
     }
-    SdlInterface interface("Test", Chip8Specs::ScreenWidth * video_scale_coeff, Chip8Specs::ScreenHeight * video_scale_coeff, Chip8Specs::ScreenWidth, Chip8Specs::ScreenHeight, &chip8);
+    SdlInterface interface("Chip8pp", Chip8Specs::ScreenWidth * video_scale_coeff, Chip8Specs::ScreenHeight * video_scale_coeff, Chip8Specs::ScreenWidth, Chip8Specs::ScreenHeight, &chip8);
 
     int pitch { static_cast<int>(sizeof(chip8.getVideo()[0]) * Chip8Specs::ScreenWidth) };
 
