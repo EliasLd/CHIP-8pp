@@ -22,6 +22,8 @@ namespace Chip8Specs
     // === Pixels ===
     constexpr uint32_t PixelOn  {0xFFFFFFFF};
     constexpr uint32_t PixelOff {0x00000000};
+    constexpr uint32_t ColorOn  {0xFF666600};
+    constexpr uint32_t ColorOff {0xFFFFFFFF};
 
     // === Sprite ===
     constexpr int SpriteWidth {8};
