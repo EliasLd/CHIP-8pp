@@ -56,7 +56,14 @@ bool SdlInterface::HandleKeyInput()
 
 void SdlInterface::Update(int pitch)
 {
-    SDL_UpdateTexture(texture, nullptr, system->getVideo(), pitch);
+    uint32_t frame_buffer[Chip8Specs::ScreenWidth * Chip8Specs::ScreenHeight];
+
+    uint32_t* video { system->getVideo() };
+
+    for(int i {} ; i < Chip8Specs::ScreenWidth * Chip8Specs::ScreenHeight ; ++i)
+        frame_buffer[i] = (video[i] ? Chip8Specs::ColorOn : Chip8Specs::ColorOff);
+
+    SDL_UpdateTexture(texture, nullptr, frame_buffer, pitch);
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, nullptr, nullptr);
     SDL_RenderPresent(renderer);
