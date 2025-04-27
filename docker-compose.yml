@@ -1,0 +1,14 @@
+services:
+  chip8pp:
+    image: chip8pp:latest
+    environment:
+      - DISPLAY=$DISPLAY
+      - ROM_PATH=${ROM_PATH}
+      - SCALE=${SCALE}
+      - DELAY=${DELAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    entrypoint: ["./build/emulator"]
+    command: ["${ROM_PATH}", "${SCALE}", "${DELAY}"]
+    stdin_open: true
+    tty: true
