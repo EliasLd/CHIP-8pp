@@ -12,6 +12,10 @@ private:
     SDL_Texture* texture    {nullptr};
     Chip8* system           {nullptr};
 
+    SDL_AudioDeviceID audio_device  {};
+    uint8_t* audio_buffer           {};
+    uint32_t audio_length           {};
+
 
 public:
     SdlInterface(const char* window_title,
