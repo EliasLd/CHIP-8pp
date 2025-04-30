@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.13)
+cmake_policy(SET CMP0077 NEW)
+
 project(chip-8pp)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -8,7 +10,11 @@ include(FetchContent)
 
 set(FETCHCONTENT_BASE_DIR ${CMAKE_SOURCE_DIR}/external)
 
-# First fetch the SDL2 library
+set(SDL_AUDIO ON CACHE BOOL "" FORCE)
+set(SDL_ALSA ON CACHE BOOL "" FORCE)
+set(SDL_PULSEAUDIO ON CACHE BOOL "" FORCE)
+set(SDL_PIPEWIRE ON CACHE BOOL "" FORCE)
+
 FetchContent_Declare(
     SDL2
     GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
@@ -19,7 +25,6 @@ FetchContent_MakeAvailable(SDL2)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-# Get all .cpp source files
 file(GLOB_RECURSE SRC_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
 add_executable(emulator ${SRC_FILES})
