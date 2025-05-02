@@ -1,11 +1,13 @@
 #include "sdl_interface.hpp"
 #include "constants.hpp"
 
+#include <iostream>
+
 SdlInterface::SdlInterface(const char* window_title,
     int window_width, int window_height,
     int texture_width, int texture_height, Chip8* system) : system {system}
 {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 
     window = SDL_CreateWindow(window_title, 0, 0, window_width, window_height, SDL_WINDOW_SHOWN);
 
@@ -13,6 +15,8 @@ SdlInterface::SdlInterface(const char* window_title,
 
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 
         texture_width, texture_height);
+
+    InitSound();
 }
 
 SdlInterface::~SdlInterface()
@@ -20,6 +24,9 @@ SdlInterface::~SdlInterface()
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    SDL_CloseAudioDevice(audio_device);
+    delete[] audio_buffer;
+
     SDL_Quit();
 }
 
