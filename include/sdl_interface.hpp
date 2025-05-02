@@ -25,6 +25,8 @@ public:
 
     bool HandleKeyInput();
     void Update(int pitch);
+    void InitSound();
+    void PlaySound();
 };
 
 #endif
