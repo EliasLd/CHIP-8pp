@@ -112,3 +112,10 @@ void SdlInterface::InitSound()
     for (int i = 0 ; i < sample_count ; ++i)
         audio_buffer[i] = (i / half_period) % 2 == 0 ? 255 : 0;
 }
+
+void SdlInterface::PlaySound()
+{
+    SDL_ClearQueuedAudio(audio_device);
+    SDL_QueueAudio(audio_device, audio_buffer, audio_length);
+    SDL_PauseAudioDevice(audio_device, 0);
+}
