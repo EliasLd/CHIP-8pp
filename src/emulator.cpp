@@ -49,6 +49,8 @@ int main(int argc, char* argv[])
 
 			chip8.Cycle();
 
+            if(chip8.getSoundTimer() > 0) interface.PlaySound();
+
 			interface.Update(pitch);
 		}
 	}
