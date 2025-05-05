@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     g++ \
     git \
     libsdl2-dev \
+    libpulse0 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
