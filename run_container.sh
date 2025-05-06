@@ -58,5 +58,11 @@ if ! xhost | grep -q "local:docker"; then
     xhost +local:docker
 fi
 
-docker run --rm -it -e DISPLAY=$DISPLAY \
--v /tmp/.X11-unix:/tmp/.X11-unix chip8pp:latest $ROM_PATH $SCALE $DELAY
+docker run --rm \
+    -e DISPLAY=$DISPLAY \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -e PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native \
+    -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
+    -v ~/.config/pulse/cookie:/root/.config/pulse/cookie \
+    --device /dev/snd \
+    chip8pp:latest $ROM_PATH $SCALE $DELAY
