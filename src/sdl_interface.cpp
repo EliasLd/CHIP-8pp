@@ -39,6 +39,10 @@ bool SdlInterface::HandleKeyInput()
 
     while(SDL_PollEvent(&event))
     {
+
+        if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_m)
+            is_muted = !is_muted;
+
         switch(event.type)
         {
         case SDL_QUIT:
@@ -110,11 +114,14 @@ void SdlInterface::InitSound()
     int half_period = spec.freq / (2 * frequency);
     // Square wave: 255 (high), 0 (low)
     for (int i = 0 ; i < sample_count ; ++i)
-        audio_buffer[i] = (i / half_period) % 2 == 0 ? 255 : 0;
+        audio_buffer[i] = (i / half_period) % 2 == 0 ? 5 : 0;
 }
 
 void SdlInterface::PlaySound()
 {
+    if(is_muted)
+        return;
+
     SDL_ClearQueuedAudio(audio_device);
     SDL_QueueAudio(audio_device, audio_buffer, audio_length);
     SDL_PauseAudioDevice(audio_device, 0);
