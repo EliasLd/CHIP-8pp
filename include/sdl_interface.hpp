@@ -16,6 +16,7 @@ private:
     uint8_t* audio_buffer           {};
     uint32_t audio_length           {};
 
+    bool is_muted {false};
 
 public:
     SdlInterface(const char* window_title,
