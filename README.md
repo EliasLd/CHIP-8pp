@@ -84,3 +84,10 @@ There's also a __script__ that you can use to run the container. It requires 3 a
 ```bash
 ./run_container.sh -r roms/pong.ch8 -s 10 -d 1
 ```
+
+## Miscellaneous
+
+| Key |       function      |
+|-----|:-------------------:|
+|__m__| Mute emulator sound |
+
