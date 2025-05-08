@@ -2,16 +2,16 @@
 A simple CHIP-8 emulator written in C++
 
 <p align="center">
-    <img src="assets/slippery_slope.png" width="250">
-    <img src="assets/br8kout.png" width="250">
-    <img src="assets/outlaw.png" width="250">
+    <img src="assets/slippery_slope.png" width="400">
+    <img src="assets/br8kout.png" width="400">
+    <img src="assets/outlaw.png" width="400">
 </p>
 
 Passed __all the tests__ from the [Timendus chip8-test-suite](https://github.com/Timendus/chip8-test-suite).
 
 <p align="center">
-    <img src="assets/opcodes_test.png" width="250">
-    <img src="assets/key_pressed.png" width="250">
+    <img src="assets/opcodes_test.png" width="400">
+    <img src="assets/key_pressed.png" width="400">
 </p>
 
 ## Table of content
