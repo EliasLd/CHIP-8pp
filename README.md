@@ -1,6 +1,32 @@
 # CHIP-8pp
 A simple CHIP-8 emulator written in C++
 
+<p align="center">
+    <img src="assets/slippery_slope.png" width="250">
+    <img src="assets/br8kout.png" width="250">
+    <img src="assets/outlaw.png" width="250">
+</p>
+
+Passed __all the tests__ from the [Timendus chip8-test-suite](https://github.com/Timendus/chip8-test-suite).
+
+<p align="center">
+    <img src="assets/opcodes_test.png" width="250">
+    <img src="assets/key_pressed.png" width="250">
+</p>
+
+## Table of content
+
+- [Getting started - Installation](#getting-started)
+- [Build and Run](#build-and-run)
+    - [Classical way (local)](#classical-way-local)
+        - [Build](#build)
+        - [Run](#run)
+    - [Docker container](#docker-container)
+        - [Docker compose](#docker-compose--env-file)
+        - [Bash script](#bash-script)
+- [Miscellaneous](#miscellaneous)
+- [Acknowledgement](#acknowledgement)       
+
 ## Getting started
 
 First clone this repository
@@ -87,7 +113,14 @@ There's also a __script__ that you can use to run the container. It requires 3 a
 
 ## Miscellaneous
 
+Here are some bonus features/modes
+
 | Key |       function      |
 |-----|:-------------------:|
 |__m__| Mute emulator sound |
 
+## Acknowledgement
+
+I would like to thank __Cowgod's__ for the amazing [Chip-8 Technical Reference](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM) and __Timendus__ for the [CHIP-8 test suite repository](https://github.com/Timendus/chip8-test-suite).
+
+These resources allowed me to precisely understand how Chip-8 works and test/debug the emulator properly !
