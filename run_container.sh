@@ -51,6 +51,10 @@ if [ -z "$ROM_PATH" ]; then
     exit 1
 fi
 
+ROM_PATH_ABS=$(realpath "$ROM_PATH")
+ROM_DIR=$(dirname "$ROM_PATH_ABS")
+ROM_FILENAME=$(basename "$ROM_PATH_ABS")
+
 # Check if xhost is activated
 # Container needs it to run SDL in host
 # graphical environment
@@ -65,4 +69,5 @@ docker run --rm \
     -v ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native \
     -v ~/.config/pulse/cookie:/root/.config/pulse/cookie \
     --device /dev/snd \
-    chip8pp:latest $ROM_PATH $SCALE $DELAY
+    -v "$ROM_DIR":/roms \
+    chip8pp:latest "/roms/$ROM_FILENAME" "$SCALE" "$DELAY"
