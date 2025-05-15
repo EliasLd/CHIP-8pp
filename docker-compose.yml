@@ -2,8 +2,7 @@ services:
   chip8pp:
     image: chip8pp:latest
     environment:
-      - DISPLAY=$DISPLAY
-      - ROM_PATH=${ROM_PATH}
+      - DISPLAY=${DISPLAY}
       - SCALE=${SCALE}
       - DELAY=${DELAY}
       - PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native
@@ -11,9 +10,10 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native
       - ~/.config/pulse/cookie:/root/.config/pulse/cookie
+      - ${ROM_DIR_PATH}:/roms
     devices:
       - /dev/snd
     entrypoint: ["./build/emulator"]
-    command: ["${ROM_PATH}", "${SCALE}", "${DELAY}"]
+    command: ["/${ROM_DIRNAME}/${ROM_FILENAME}", "${SCALE}", "${DELAY}"]
     stdin_open: true
     tty: true
