@@ -1,5 +1,5 @@
 # CHIP-8pp
-A simple CHIP-8 emulator written in C++
+A simple CHIP-8 emulator written in __C++__
 
 <p align="center">
     <img src="assets/slippery_slope.png" width="400">
